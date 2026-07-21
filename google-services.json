@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "455490691617",
+    "project_id": "brokersblitz-15a9b",
+    "storage_bucket": "brokersblitz-15a9b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455490691617:android:1427100790a64a7e413960",
+        "android_client_info": {
+          "package_name": "com.adarsh9926.BrokersBlitz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2L35ObZDbotvlvIGZZ5Di5a6XtGuPBbQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -18,7 +18,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.adarsh9926.BrokersBlitz"
+      "package": "com.adarsh9926.BrokersBlitz",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",
@@ -36,7 +37,10 @@
             "imageWidth": 76
           }
         }
-      ]
+      ],
+      "expo-font",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth"
     ],
     "experiments": {
       "typedRoutes": true,
