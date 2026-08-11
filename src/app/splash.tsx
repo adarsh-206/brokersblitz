@@ -38,7 +38,7 @@ export default function SplashScreen() {
         duration: 400,
         useNativeDriver: true,
       }).start(() => {
-        router.replace("/(auth)/onboarding");
+        router.replace("/(tabs)");
       });
     }, 2500);
 

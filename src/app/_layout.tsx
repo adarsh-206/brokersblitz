@@ -8,6 +8,7 @@ import {
 } from "@expo-google-fonts/plus-jakarta-sans";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
+import { initDatabase } from "../db";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,6 +20,11 @@ export default function RootLayout() {
     "PlusJakarta-Bold": PlusJakartaSans_700Bold,
     "PlusJakarta-ExtraBold": PlusJakartaSans_800ExtraBold,
   });
+
+  useEffect(() => {
+    // resetDatabase();
+    initDatabase();
+  }, []);
 
   useEffect(() => {
     if (fontsLoaded || error) {
