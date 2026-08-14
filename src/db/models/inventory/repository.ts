@@ -1,5 +1,6 @@
 // db/models/inventory/repository.ts
 import { db } from "../../index";
+import { NotificationRepository } from "../notifications/repository";
 import { InventoryItem } from "./types";
 
 export const InventoryRepo = {
@@ -31,7 +32,7 @@ export const InventoryRepo = {
   },
 
   insert: (item: Omit<InventoryItem, "id">) => {
-    return db.runSync(
+    const result = db.runSync(
       `INSERT INTO inventory (
         title, category, purpose, customPurpose, subCategory, customSubCategory, priceValue, priceUnit, status, state, district, cityArea, details, ownerName, ownerPhone, commissionValue, commissionType
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
@@ -57,6 +58,18 @@ export const InventoryRepo = {
         item.commissionType ?? "Percentage",
       ],
     );
+
+    const insertedItem = { ...item, id: result.lastInsertRowId };
+
+    NotificationRepository.create({
+      type: "INVENTORY",
+      title: `New Listing: ${item.title || "Property"}`,
+      body: `Listed in ${item.cityArea || "City"} for ₹${item.priceValue} ${item.priceUnit} (${item.purpose}).`,
+      entityId: result.lastInsertRowId,
+      entityData: insertedItem,
+    });
+
+    return result;
   },
 
   update: (item: InventoryItem) => {

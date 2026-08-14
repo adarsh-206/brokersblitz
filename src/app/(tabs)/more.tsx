@@ -13,7 +13,15 @@ export default function MoreScreen() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handlePress = (target: string) => {
-    if (target === "reset") {
+    if (target === "emi") {
+      router.push("/emi-calculator");
+    } else if (target === "brokerage") {
+      router.push("/brokerage-calculator");
+    } else if (target === "cheatsheet") {
+      router.push("/cheat-sheet");
+    } else if (target === "about") {
+      router.push("/about");
+    } else if (target === "reset") {
       setShowResetModal(true);
     }
   };
@@ -43,126 +51,150 @@ export default function MoreScreen() {
         style={{ flex: 1, backgroundColor: "#F8F9FD" }}
         contentContainerStyle={{
           paddingTop: insets.top > 0 ? insets.top + 24 : 36,
-          paddingHorizontal: 24,
+          paddingHorizontal: 20,
           paddingBottom: 40,
         }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ marginBottom: 32 }}>
+        <View style={{ marginBottom: 28 }}>
           <Text
             style={{
-              fontSize: 32,
+              fontSize: 30,
               fontWeight: "900",
               color: "#1E1B4B",
               letterSpacing: -0.5,
             }}
           >
-            Tools & Support
+            Tools & Toolkit
           </Text>
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 14,
               fontWeight: "500",
               color: "#6B7280",
               marginTop: 4,
             }}
           >
-            Manage your professional toolkit
+            Real Estate • Vehicles • Insurance • Loan DSA
           </Text>
         </View>
 
-        <View style={{ gap: 16, marginBottom: 32 }}>
+        <View style={{ gap: 14, marginBottom: 28 }}>
           <TouchableOpacity
             onPress={() => handlePress("emi")}
+            activeOpacity={0.75}
             style={{
               flexDirection: "row",
               alignItems: "center",
               backgroundColor: "#FFFFFF",
-              paddingHorizontal: 20,
-              paddingVertical: 18,
-              borderRadius: 24,
+              paddingHorizontal: 18,
+              paddingVertical: 16,
+              borderRadius: 22,
               elevation: 2,
               shadowColor: "#000000",
               shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.02,
+              shadowOpacity: 0.04,
               shadowRadius: 8,
             }}
           >
             <View
               style={{
-                width: 48,
-                height: 48,
+                width: 46,
+                height: 46,
                 backgroundColor: "rgba(93, 69, 249, 0.08)",
-                borderRadius: 16,
+                borderRadius: 14,
                 alignItems: "center",
                 justifyContent: "center",
-                marginRight: 16,
+                marginRight: 14,
               }}
             >
-              <Ionicons name="calculator" size={20} color="#5D45F9" />
+              <Ionicons name="calculator" size={22} color="#5D45F9" />
             </View>
-            <Text
-              style={{
-                flex: 1,
-                fontSize: 16,
-                fontWeight: "800",
-                color: "#1E1B4B",
-              }}
-            >
-              EMI Calculator
-            </Text>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "800",
+                  color: "#1E1B4B",
+                }}
+              >
+                All-in-One Loan EMI
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "500",
+                  color: "#6B7280",
+                  marginTop: 2,
+                }}
+              >
+                Home, Car/Bike & Personal loan schedules
+              </Text>
+            </View>
             <Ionicons name="chevron-forward" size={18} color="#D1D5DB" />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => handlePress("brokerage")}
+            activeOpacity={0.75}
             style={{
               flexDirection: "row",
               alignItems: "center",
               backgroundColor: "#FFFFFF",
-              paddingHorizontal: 20,
-              paddingVertical: 18,
-              borderRadius: 24,
+              paddingHorizontal: 18,
+              paddingVertical: 16,
+              borderRadius: 22,
               elevation: 2,
               shadowColor: "#000000",
               shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.02,
+              shadowOpacity: 0.04,
               shadowRadius: 8,
             }}
           >
             <View
               style={{
-                width: 48,
-                height: 48,
+                width: 46,
+                height: 46,
                 backgroundColor: "rgba(93, 69, 249, 0.08)",
-                borderRadius: 16,
+                borderRadius: 14,
                 alignItems: "center",
                 justifyContent: "center",
-                marginRight: 16,
+                marginRight: 14,
               }}
             >
-              <Ionicons name="pie-chart" size={20} color="#5D45F9" />
+              <Ionicons name="pie-chart" size={22} color="#5D45F9" />
             </View>
-            <Text
-              style={{
-                flex: 1,
-                fontSize: 16,
-                fontWeight: "800",
-                color: "#1E1B4B",
-              }}
-            >
-              Brokerage Calculator
-            </Text>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "800",
+                  color: "#1E1B4B",
+                }}
+              >
+                Commission & Brokerage
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "500",
+                  color: "#6B7280",
+                  marginTop: 2,
+                }}
+              >
+                Property, Auto, Insurance POSP & Loan DSA
+              </Text>
+            </View>
             <Ionicons name="chevron-forward" size={18} color="#D1D5DB" />
           </TouchableOpacity>
         </View>
 
-        <View style={{ marginBottom: 32 }}>
+        <View style={{ marginBottom: 28 }}>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginBottom: 16,
+              marginBottom: 14,
               paddingLeft: 4,
             }}
           >
@@ -184,92 +216,116 @@ export default function MoreScreen() {
                 textTransform: "uppercase",
               }}
             >
-              Support
+              Industry Knowledge
             </Text>
           </View>
 
-          <View style={{ gap: 16 }}>
+          <View style={{ gap: 14 }}>
             <TouchableOpacity
-              onPress={() => handlePress("help")}
+              onPress={() => handlePress("cheatsheet")}
+              activeOpacity={0.75}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 backgroundColor: "#FFFFFF",
-                paddingHorizontal: 20,
-                paddingVertical: 18,
-                borderRadius: 24,
+                paddingHorizontal: 18,
+                paddingVertical: 16,
+                borderRadius: 22,
                 elevation: 2,
                 shadowColor: "#000000",
                 shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.02,
+                shadowOpacity: 0.04,
                 shadowRadius: 8,
               }}
             >
               <View
                 style={{
-                  width: 48,
-                  height: 48,
+                  width: 46,
+                  height: 46,
                   backgroundColor: "rgba(93, 69, 249, 0.08)",
-                  borderRadius: 16,
+                  borderRadius: 14,
                   alignItems: "center",
                   justifyContent: "center",
-                  marginRight: 16,
+                  marginRight: 14,
                 }}
               >
-                <Ionicons name="help-circle" size={22} color="#5D45F9" />
+                <Ionicons name="book-outline" size={22} color="#5D45F9" />
               </View>
-              <Text
-                style={{
-                  flex: 1,
-                  fontSize: 16,
-                  fontWeight: "800",
-                  color: "#1E1B4B",
-                }}
-              >
-                Help & Support
-              </Text>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "800",
+                    color: "#1E1B4B",
+                  }}
+                >
+                  Agent Guide & Cheatsheet
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "500",
+                    color: "#6B7280",
+                    marginTop: 2,
+                  }}
+                >
+                  Land Units, Vehicle IDV, Insurance & CIBIL
+                </Text>
+              </View>
               <Ionicons name="chevron-forward" size={18} color="#D1D5DB" />
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => handlePress("about")}
+              activeOpacity={0.75}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 backgroundColor: "#FFFFFF",
-                paddingHorizontal: 20,
-                paddingVertical: 18,
-                borderRadius: 24,
+                paddingHorizontal: 18,
+                paddingVertical: 16,
+                borderRadius: 22,
                 elevation: 2,
                 shadowColor: "#000000",
                 shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.02,
+                shadowOpacity: 0.04,
                 shadowRadius: 8,
               }}
             >
               <View
                 style={{
-                  width: 48,
-                  height: 48,
+                  width: 46,
+                  height: 46,
                   backgroundColor: "rgba(93, 69, 249, 0.08)",
-                  borderRadius: 16,
+                  borderRadius: 14,
                   alignItems: "center",
                   justifyContent: "center",
-                  marginRight: 16,
+                  marginRight: 14,
                 }}
               >
                 <Ionicons name="information-circle" size={22} color="#5D45F9" />
               </View>
-              <Text
-                style={{
-                  flex: 1,
-                  fontSize: 16,
-                  fontWeight: "800",
-                  color: "#1E1B4B",
-                }}
-              >
-                About BrokersBlitz
-              </Text>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "800",
+                    color: "#1E1B4B",
+                  }}
+                >
+                  About BrokersBlitz
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "500",
+                    color: "#6B7280",
+                    marginTop: 2,
+                  }}
+                >
+                  Multi-domain broker CRM & offline database
+                </Text>
+              </View>
               <Ionicons name="chevron-forward" size={18} color="#D1D5DB" />
             </TouchableOpacity>
           </View>
@@ -280,7 +336,7 @@ export default function MoreScreen() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginBottom: 16,
+              marginBottom: 14,
               paddingLeft: 4,
             }}
           >
@@ -308,43 +364,55 @@ export default function MoreScreen() {
 
           <TouchableOpacity
             onPress={() => handlePress("reset")}
+            activeOpacity={0.75}
             style={{
               flexDirection: "row",
               alignItems: "center",
               backgroundColor: "#FFFFFF",
-              paddingHorizontal: 20,
-              paddingVertical: 18,
-              borderRadius: 24,
+              paddingHorizontal: 18,
+              paddingVertical: 16,
+              borderRadius: 22,
               elevation: 2,
               shadowColor: "#000000",
               shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.02,
+              shadowOpacity: 0.04,
               shadowRadius: 8,
             }}
           >
             <View
               style={{
-                width: 48,
-                height: 48,
+                width: 46,
+                height: 46,
                 backgroundColor: "rgba(239, 68, 68, 0.08)",
-                borderRadius: 16,
+                borderRadius: 14,
                 alignItems: "center",
                 justifyContent: "center",
-                marginRight: 16,
+                marginRight: 14,
               }}
             >
               <Ionicons name="refresh-circle" size={22} color="#EF4444" />
             </View>
-            <Text
-              style={{
-                flex: 1,
-                fontSize: 16,
-                fontWeight: "800",
-                color: "#EF4444",
-              }}
-            >
-              Factory Reset
-            </Text>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "800",
+                  color: "#EF4444",
+                }}
+              >
+                Factory Reset
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "500",
+                  color: "#9CA3AF",
+                  marginTop: 2,
+                }}
+              >
+                Wipe all local inventory and clients
+              </Text>
+            </View>
             <Ionicons name="chevron-forward" size={18} color="#FCA5A5" />
           </TouchableOpacity>
         </View>
@@ -354,7 +422,7 @@ export default function MoreScreen() {
         visible={showResetModal}
         type="danger"
         title="Factory Reset App?"
-        message="This action will permanently delete all your local inventory listings, client leads, and saved records. You will not be able to restore this data."
+        message="This action will permanently delete all your local inventory listings, client leads, and saved records across all categories. You will not be able to restore this data."
         confirmText="Reset Data"
         cancelText="Cancel"
         onConfirm={handleFactoryReset}

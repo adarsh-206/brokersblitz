@@ -239,7 +239,7 @@ export default function LeadsScreen() {
             activeOpacity={0.8}
           >
             <Feather name="edit-3" size={14} color="#4F46E5" />
-            <Text style={styles.editActionBtnText}>Manage</Text>
+            <Text style={styles.editActionBtnText}>Edit</Text>
           </TouchableOpacity>
         </View>
       </Pressable>

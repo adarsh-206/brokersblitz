@@ -1,5 +1,10 @@
 // db/models/leads/repository.ts
+import {
+  cancelLeadFollowUpPopup,
+  scheduleLeadFollowUpPopup,
+} from "../../../utils/deviceNotifications";
 import { db } from "../../index";
+import { NotificationRepository } from "../notifications/repository";
 import { Lead } from "./types";
 
 export const LeadRepo = {
@@ -46,17 +51,17 @@ export const LeadRepo = {
   getUpcomingFollowUps: (dateLimit?: string): Lead[] => {
     if (dateLimit) {
       return db.getAllSync<Lead>(
-        "SELECT * FROM leads WHERE nextFollowUpDate != '' AND nextFollowUpDate <= ? AND status NOT IN ('CONVERTED', 'LOST') ORDER BY nextFollowUpDate ASC;",
+        "SELECT * FROM leads WHERE nextFollowUpDate != '' AND nextFollowUpDate <= ? AND status != 'LOST' ORDER BY nextFollowUpDate ASC;",
         [dateLimit],
       );
     }
     return db.getAllSync<Lead>(
-      "SELECT * FROM leads WHERE nextFollowUpDate != '' AND status NOT IN ('CONVERTED', 'LOST') ORDER BY nextFollowUpDate ASC;",
+      "SELECT * FROM leads WHERE nextFollowUpDate != '' AND status != 'LOST' ORDER BY nextFollowUpDate ASC;",
     );
   },
 
   insert: (lead: Omit<Lead, "id">) => {
-    return db.runSync(
+    const result = db.runSync(
       `INSERT INTO leads (
         inventoryId, name, phone, email, category, purpose, customPurpose, subCategory, customSubCategory, minBudget, maxBudget, budgetUnit, status, priority, source, customSource, profession, occupationType, customOccupationType, approxMonthlyIncome, cibilScoreRange, preferredState, preferredDistrict, preferredCityArea, specificRequirementsJson, nextFollowUpDate, notes
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
@@ -92,10 +97,41 @@ export const LeadRepo = {
         lead.notes ?? "",
       ],
     );
+
+    const insertedLead = { ...lead, id: result.lastInsertRowId };
+
+    NotificationRepository.create({
+      type: "LEAD",
+      title: `New Lead: ${lead.name || "Unnamed"}`,
+      body: `Inquiry for ${lead.subCategory || lead.category || "Property"} (${lead.phone}).`,
+      entityId: result.lastInsertRowId,
+      entityData: insertedLead,
+    });
+
+    if (lead.nextFollowUpDate) {
+      NotificationRepository.create({
+        type: "FOLLOW_UP",
+        title: `Follow-up Scheduled: ${lead.name}`,
+        body: `Contact scheduled on ${lead.nextFollowUpDate} for ${lead.phone}.`,
+        entityId: result.lastInsertRowId,
+        entityData: insertedLead,
+      });
+
+      scheduleLeadFollowUpPopup(
+        result.lastInsertRowId,
+        lead.name,
+        lead.nextFollowUpDate,
+        lead.phone,
+      );
+    }
+
+    return result;
   },
 
   update: (lead: Lead) => {
-    return db.runSync(
+    const prevLead = LeadRepo.getById(lead.id);
+
+    const result = db.runSync(
       `UPDATE leads SET 
         inventoryId=?, name=?, phone=?, email=?, category=?, purpose=?, customPurpose=?, subCategory=?, customSubCategory=?, minBudget=?, maxBudget=?, budgetUnit=?, status=?, priority=?, source=?, customSource=?, profession=?, occupationType=?, customOccupationType=?, approxMonthlyIncome=?, cibilScoreRange=?, preferredState=?, preferredDistrict=?, preferredCityArea=?, specificRequirementsJson=?, nextFollowUpDate=?, notes=?
       WHERE id=?;`,
@@ -132,6 +168,48 @@ export const LeadRepo = {
         lead.id,
       ],
     );
+
+    if (prevLead && prevLead.status !== lead.status) {
+      let title = `Lead Status: ${lead.status}`;
+      let body = `${lead.name}'s status was changed to ${lead.status}.`;
+
+      if (lead.status === "LOST") {
+        title = "Lead Marked Lost";
+        body = `Lead ${lead.name} has been marked as LOST.`;
+        cancelLeadFollowUpPopup(lead.id);
+      }
+
+      NotificationRepository.create({
+        type: "LEAD",
+        title,
+        body,
+        entityId: lead.id,
+        entityData: lead,
+      });
+    }
+
+    if (lead.nextFollowUpDate) {
+      if (!prevLead || prevLead.nextFollowUpDate !== lead.nextFollowUpDate) {
+        NotificationRepository.create({
+          type: "FOLLOW_UP",
+          title: `Follow-up Updated: ${lead.name}`,
+          body: `Contact scheduled on ${lead.nextFollowUpDate} for ${lead.phone}.`,
+          entityId: lead.id,
+          entityData: lead,
+        });
+
+        scheduleLeadFollowUpPopup(
+          lead.id,
+          lead.name,
+          lead.nextFollowUpDate,
+          lead.phone,
+        );
+      }
+    } else {
+      cancelLeadFollowUpPopup(lead.id);
+    }
+
+    return result;
   },
 
   updateStatus: (
@@ -139,13 +217,56 @@ export const LeadRepo = {
     status: Lead["status"],
     nextFollowUpDate?: string,
   ) => {
-    return db.runSync(
+    const lead = LeadRepo.getById(id);
+    const result = db.runSync(
       "UPDATE leads SET status = ?, nextFollowUpDate = ? WHERE id = ?;",
       [status, nextFollowUpDate ?? "", id],
     );
+
+    if (lead) {
+      const updatedLead = {
+        ...lead,
+        status,
+        nextFollowUpDate: nextFollowUpDate ?? lead.nextFollowUpDate,
+      };
+
+      let title = `Lead Status: ${status}`;
+      let body = `${lead.name}'s status was changed to ${status}.`;
+
+      if (status === "LOST") {
+        title = "Lead Marked Lost";
+        body = `Lead ${lead.name} has been marked as LOST.`;
+        cancelLeadFollowUpPopup(id);
+      }
+
+      NotificationRepository.create({
+        type: "LEAD",
+        title,
+        body,
+        entityId: id,
+        entityData: updatedLead,
+      });
+
+      if (nextFollowUpDate) {
+        NotificationRepository.create({
+          type: "FOLLOW_UP",
+          title: `Follow-up Rescheduled: ${lead.name}`,
+          body: `Next follow-up set for ${nextFollowUpDate}.`,
+          entityId: id,
+          entityData: updatedLead,
+        });
+
+        scheduleLeadFollowUpPopup(id, lead.name, nextFollowUpDate, lead.phone);
+      } else if (!nextFollowUpDate) {
+        cancelLeadFollowUpPopup(id);
+      }
+    }
+
+    return result;
   },
 
   delete: (id: number) => {
+    cancelLeadFollowUpPopup(id);
     return db.runSync("DELETE FROM leads WHERE id = ?;", [id]);
   },
 };

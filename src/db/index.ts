@@ -63,6 +63,17 @@ export function initDatabase() {
       createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (inventoryId) REFERENCES inventory (id) ON DELETE SET NULL
     );
+
+    CREATE TABLE IF NOT EXISTS notifications (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL,
+      title TEXT NOT NULL,
+      body TEXT NOT NULL,
+      entityId INTEGER DEFAULT NULL,
+      entityData TEXT DEFAULT '{}',
+      isRead INTEGER DEFAULT 0,
+      createdAt TEXT DEFAULT CURRENT_TIMESTAMP
+    );
   `);
 }
 

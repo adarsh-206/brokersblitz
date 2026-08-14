@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomAlertModal from "../components/CustomAlertModal";
 import { InventoryRepo } from "../db/models/inventory/repository";
@@ -295,10 +296,12 @@ export default function ManageLeadScreen() {
         )}
       </View>
 
-      <ScrollView
+      <KeyboardAwareScrollView
         contentContainerStyle={styles.form}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={20}
       >
         <View style={styles.groupBlock}>
           <Text style={styles.groupTitle}>CLIENT CONTACT INFO</Text>
@@ -706,7 +709,7 @@ export default function ManageLeadScreen() {
             {existingLead ? "Update Lead" : "Save Lead"}
           </Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <Modal
         visible={pickerModal.visible}
