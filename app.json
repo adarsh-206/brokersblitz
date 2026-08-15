@@ -7,6 +7,9 @@
     "icon": "./assets/images/icon.png",
     "scheme": "brokersblitz",
     "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#000000"
+    },
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.adarsh9926.BrokersBlitz"
